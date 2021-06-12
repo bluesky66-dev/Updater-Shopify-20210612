@@ -3,22 +3,25 @@ require('dotenv').config();
 var XLSX = require('xlsx');
 const fs = require('fs');
 
-const EXCEL_FILE = 'MIXED_ACCESSORIES';
-const SHEET_INDEX = 2;
-const SHEET_LENGTH = 133;
+const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
+const SHEET_INDEX = 0;
+const SHEET_LENGTH = 550;
+const IMAGE_DIR_BASE = '20210612/parkas';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'L';
-const HTML_INDEX = 'M';
+const TITLE_INDEX = 'K';
+const HTML_INDEX = 'L';
+
 const OPTION1_INDEX = 'C';
 const OPTION2_INDEX = 'B';
-const MEDIA_INDEX = 'E';
+
+const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 269385859237;
+const COLLECTION_ID = 270061338789;
 
 // Live Store
-const COLLECTION_ID = 268852134059;
+// const COLLECTION_ID = 268852134059;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -26,10 +29,10 @@ const updateProducts = async (sourceURL, destinationURL, authSource, authDest) =
         const productSource = await getProductsFromUrl(sourceURL, authSource);
         const productDest = await getProductsFromExcel(destinationURL, authDest);
         console.log('Product Data Fetched ' + productSource.products.length)
-        fs.writeFile(`files/productSource.json`, JSON.stringify(productSource), err => {
-        })
-        fs.writeFile(`files/productDest.json`, JSON.stringify(productDest), err => {
-        })
+        // fs.writeFile(`files/productSource.json`, JSON.stringify(productSource), err => {
+        // })
+        // fs.writeFile(`files/productDest.json`, JSON.stringify(productDest), err => {
+        // })
 
         const productData = [productSource, productDest];
         // const productTitle = 12;
@@ -92,10 +95,10 @@ const checkProductData = async (storeURL, auth, productData) => {
         }
 
         if (product.variants.length !== variants.length) {
-            // fs.writeFile(`files/dProducts-${id}.json`, JSON.stringify(dProducts), err => {
-            // })
-            // fs.writeFile(`files/sProducts-${id}.json`, JSON.stringify(productsSource[i]), err => {
-            // })
+            fs.writeFile(`files/dProducts-${id}.json`, JSON.stringify(dProducts), err => {
+            })
+            fs.writeFile(`files/sProducts-${id}.json`, JSON.stringify(productsSource[i]), err => {
+            })
             // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${product.variants.length} ***** ${variants.length}` )
             // break;
             console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${variants.length} ***** ${product.variants.length}` )
@@ -155,7 +158,7 @@ const putProduct = async (storeURL, auth, product) => {
 
 const getProductsFromExcel = async (storeURL, auth) => {
     console.log('===Reading Products===');
-    var workbook = XLSX.readFile(`Products/${EXCEL_FILE}.xlsx`);
+    var workbook = XLSX.readFile(EXCEL_FILE);
     var first_sheet_name = workbook.SheetNames[SHEET_INDEX];
     var worksheet = workbook.Sheets[first_sheet_name];
     const products = [];
