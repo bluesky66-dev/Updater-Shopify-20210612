@@ -3,6 +3,7 @@ require('dotenv').config();
 var XLSX = require('xlsx');
 const fs = require('fs');
 const Shopify = require('shopify-api-node');
+const IMAGE_SERVER = 'https://blueskydev.000webhostapp.com/';
 
 const {
     apiKey_source,
@@ -13,11 +14,63 @@ const {
     sourceURL
 } = process.env;
 
+const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
+const PRODUCT_FILE = 'Products/20210612/adjusted_size.json';
+const SHEET_INDEX = 0;
+const SHEET_LENGTH = 550;
+const IMAGE_DIR_BASE = '20210612/parkas';
+
+const CAT_INDEX = 'A';
+const TITLE_INDEX = 'K';
+const HTML_INDEX = 'L';
+
+const OPTION1_INDEX = 'C';
+const OPTION2_INDEX = 'B';
+const ALI_CODE_INDEX = 'D';
+const MODEL_INDEX = 'E';
+
+const SKU_INDEX = 'F';
+const BARCODE_INDEX = 'J';
+
+const COST_PER_INDEX = 'M';
+const PRICE_INDEX = 'N';
+const COMPARE_AT_INDEX = 'O';
+
+const MEDIA1_INDEX = 'G';
+const MEDIA2_INDEX = 'H';
+const MEDIA3_INDEX = 'I';
+
+const DELIVERY_INDEX = 'P';
+const STOCK_IN_INDEX = 'Q';
+const WEIGHT_INDEX = 'R';
+const HS_CODE_INDEX = 'S';
+const VENDOR_INDEX = 'U';
+
 const importProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
     try {
-        const productData = await getProducts(destinationURL, authDest);
+        let productData = {};
+        if (fs.existsSync(PRODUCT_FILE)) {
+            const productsFileData = fs.readFileSync(PRODUCT_FILE, 'utf8');
+            productData = JSON.parse(productsFileData);
+            // fs.writeFile('files/require_products.json', JSON.stringify(productData), err => {
+            //     if (err) {
+            //         console.error(err)
+            //         return
+            //     }
+            // })
+            // return;
+        } else {
+            productData = await getProducts(destinationURL, authDest);
+            fs.writeFile(PRODUCT_FILE, JSON.stringify(productData), err => {
+                if (err) {
+                    console.error(err)
+                    return
+                }
+            })
+        }
         productData ? console.log('Product Data Fetched ' + productData.length) : console.log('Error occured, no products!');
+
         // const productTitle = 12;
         const productTitle = await checkProductData(destinationURL, authDest, productData);
         return typeof productTitle == 'number' ? 'Successfully imported ' + productTitle + ' products' : 'Error occured: ' + productTitle;
@@ -70,20 +123,22 @@ const postProducts = async (storeURL, auth, productsSource, i) => {
 }
 const getProducts = async (storeURL, auth) => {
     console.log('===Reading Products===');
-    var workbook = XLSX.readFile('Products/MIXED_ACCESSORIES.xlsx');
-    var first_sheet_name = workbook.SheetNames[3];
+    var workbook = XLSX.readFile(EXCEL_FILE);
+    var first_sheet_name = workbook.SheetNames[SHEET_INDEX];
     var worksheet = workbook.Sheets[first_sheet_name];
     const products = [];
     let preTitle = '';
     let preCat = '';
     let preHtmlBody = '';
     let product = {};
-    for (let i = 2; i <= 21; i++) {
+    for (let i = 2; i <= SHEET_LENGTH; i++) {
         console.log(`===Reading Products === ${i}`);
-        const category = worksheet[`A${i}`]?.v.trim();
-        const title = worksheet[`L${i}`]?.v;
-        const htmlBody = worksheet[`M${i}`]?.v;
-        const deliveryTime = worksheet[`Q${i}`]?.v;
+        const category = worksheet[`${CAT_INDEX}${i}`]?.v.trim();
+        const title = worksheet[`${TITLE_INDEX}${i}`]?.v;
+        const htmlBody = worksheet[`${HTML_INDEX}${i}`]?.v;
+        const deliveryTime = worksheet[`${DELIVERY_INDEX}${i}`]?.v;
+        const vendor = worksheet[`${VENDOR_INDEX}${i}`]?.v;
+        const aliCode = worksheet[`${ALI_CODE_INDEX}${i}`]?.v;
         if (!title && !category) continue;
 
         if (preTitle === title && preCat === category && preHtmlBody === htmlBody) {
@@ -126,6 +181,7 @@ const getProducts = async (storeURL, auth) => {
             product.title = title;
             product.status = 'active';
             product.body_html = htmlBody;
+            product.vendor = vendor;
             const categories = category.split('-');
             product.product_type = categories[0].trim();
             product.tags = [categories[0].trim(), categories[1].trim()];
@@ -136,6 +192,12 @@ const getProducts = async (storeURL, auth) => {
                 product.metafields.push({
                     "key": "delivery_time",
                     "value": deliveryTime,
+                    "value_type": "string",
+                    "namespace": getMetaNamespace(product.product_type)
+                })
+                product.metafields.push({
+                    "key": "ali_code",
+                    "value": aliCode,
                     "value_type": "string",
                     "namespace": getMetaNamespace(product.product_type)
                 })
@@ -165,18 +227,19 @@ const getProducts = async (storeURL, auth) => {
 }
 
 const getProductsVariants = (worksheet, product, i) => {
-    const option1 = worksheet[`C${i}`]?.v;
-    const option2 = worksheet[`B${i}`]?.v;
-    const sku = worksheet[`D${i}`]?.v;
-    // const barcode = worksheet[`K${i}`]?.v;
+    const option1 = worksheet[`${OPTION1_INDEX}${i}`]?.v;
+    const option2 = worksheet[`${OPTION2_INDEX}${i}`]?.v;
+    // const option3 = worksheet[`${MODEL_INDEX}${i}`]?.v;
+    const sku = worksheet[`${SKU_INDEX}${i}`]?.v;
+    const barcode = worksheet[`${BARCODE_INDEX}${i}`]?.v;
 
-    const costPerItem = worksheet[`N${i}`]?.v;
-    const price = worksheet[`O${i}`]?.v;
-    const compareAtPrice = worksheet[`P${i}`]?.v;
-    const inventoryQuantity = worksheet[`R${i}`]?.v;
+    const costPerItem = worksheet[`${COST_PER_INDEX}${i}`]?.v;
+    const price = worksheet[`${PRICE_INDEX}${i}`]?.v;
+    const compareAtPrice = worksheet[`${COMPARE_AT_INDEX}${i}`]?.v;
+    const inventoryQuantity = worksheet[`${STOCK_IN_INDEX}${i}`]?.v;
 
-    const weight = worksheet[`S${i}`]?.v;
-    const hsCode = worksheet[`T${i}`]?.v;
+    const weight = worksheet[`${WEIGHT_INDEX}${i}`]?.v;
+    const hsCode = worksheet[`${HS_CODE_INDEX}${i}`]?.v;
 
     if (product.options[0].values.indexOf(option1) < 0) {
         if (option1) product.options[0].values.push(option1);
@@ -184,13 +247,17 @@ const getProductsVariants = (worksheet, product, i) => {
     if (product.options[1].values.indexOf(option2) < 0) {
         if (option2) product.options[1].values.push(option2);
     }
+    // if (product.options[2].values.indexOf(option3) < 0) {
+    //     if (option3) product.options[2].values.push(option3);
+    // }
 
     product.variants.push({
         option1: option1,
         option2: option2,
+        // option3: option3,
         price: price,
         sku: sku,
-        // barcode: barcode,
+        barcode: barcode,
         compare_at_price: compareAtPrice,
         cost: costPerItem,
         weight: weight,
@@ -204,40 +271,37 @@ const getMetaNamespace = (value) => {
 }
 
 const getProductsImages = async (worksheet, i) => {
-    const imageServer = 'https://blueskydev.000webhostapp.com/';
     const images = [];
     const productImages = [];
-    // const media1 = worksheet[`D${i}`]?.v;
-    const media2 = worksheet[`E${i}`]?.v;
-    const media3 = worksheet[`F${i}`]?.v;
-    const media4 = worksheet[`G${i}`]?.v;
-    const media5 = worksheet[`H${i}`]?.v;
-    const media6 = worksheet[`I${i}`]?.v;
-    const media7 = worksheet[`J${i}`]?.v;
+    const media1 = worksheet[`${MEDIA1_INDEX}${i}`]?.v;
+    const media2 = worksheet[`${MEDIA2_INDEX}${i}`]?.v;
+    const media3 = worksheet[`${MEDIA3_INDEX}${i}`]?.v;
+    // const media4 = worksheet[`G${i}`]?.v;
+    // const media5 = worksheet[`H${i}`]?.v;
+    // const media6 = worksheet[`I${i}`]?.v;
+    // const media7 = worksheet[`J${i}`]?.v;
 
-    // if (media1) images.push(media1);
+    if (media1) images.push(media1);
     if (media2) images.push(media2);
     if (media3) images.push(media3);
-    if (media4) images.push(media4);
-    if (media5) images.push(media5);
-    if (media6) images.push(media6);
-    if (media7) images.push(media7);
+    // if (media4) images.push(media4);
+    // if (media5) images.push(media5);
+    // if (media6) images.push(media6);
+    // if (media7) images.push(media7);
 
     for (let m = 0; m < images.length; m++){
         try {
-            const imagePath1 = `MAN BAGS/${images[m]}.jpg`;
-            const imagePath2 = `MAN BAGS/${images[m]}.png`;
+            const imagePath1 = `${IMAGE_DIR_BASE}/${images[m]}.jpg`;
+            const imagePath2 = `${IMAGE_DIR_BASE}/${images[m]}.png`;
 
             if (fs.existsSync(`Products/${imagePath1}`)) {
-                // const attachment = fs.readFileSync(imagePath1, {encoding: 'base64'});
                 productImages.push({
-                    src: imageServer + imagePath1
+                    src: IMAGE_SERVER + imagePath1
                 });
             }
             if (fs.existsSync(`Products/${imagePath2}`)) {
-                // const attachment = fs.readFileSync(imagePath2, {encoding: 'base64'});
                 productImages.push({
-                    src: imageServer + imagePath1
+                    src: IMAGE_SERVER + imagePath2
                 });
             }
         } catch (e) {
