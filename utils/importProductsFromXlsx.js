@@ -15,16 +15,16 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 4;
-const SHEET_LENGTH = 7;
-const IMAGE_DIR_BASE = '20210612/MIXED';
+const SHEET_INDEX = 5;
+const SHEET_LENGTH = 157;
+const IMAGE_DIR_BASE = '20210612/MENS T SHIRTS';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
 const HTML_INDEX = 'L';
 
-const OPTION1_INDEX = 'B';
-const OPTION2_INDEX = 'C';
+const OPTION1_INDEX = 'C';
+const OPTION2_INDEX = 'B';
 const ALI_CODE_INDEX = 'D';
 const MODEL_INDEX = 'E';
 
