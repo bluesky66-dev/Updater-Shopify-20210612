@@ -2,10 +2,12 @@ var axios = require('axios');
 require('dotenv').config();
 var XLSX = require('xlsx');
 const fs = require('fs');
+const IMAGE_SERVER = 'https://blueskydev.000webhostapp.com/';
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
 const SHEET_INDEX = 2;
 const SHEET_LENGTH = 261;
+const IMAGE_DIR_BASE = '20210612/belts more';
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
@@ -15,7 +17,9 @@ const HTML_INDEX = 'L';
 const OPTION1_INDEX = 'B';
 const OPTION2_INDEX = 'C';
 
-const MEDIA_INDEX = 'G';
+const MEDIA1_INDEX = 'G';
+const MEDIA2_INDEX = 'H';
+const MEDIA3_INDEX = 'I';
 
 // Dev Store
 // const COLLECTION_ID = 270075887781;
@@ -23,7 +27,7 @@ const MEDIA_INDEX = 'G';
 // Live Store
 const COLLECTION_ID = 268744392875;
 
-const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
+const updateProductImages = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
     try {
         const productSource = await getProductsFromUrl(sourceURL, authSource);
@@ -75,40 +79,35 @@ const checkProductData = async (storeURL, auth, productData) => {
             continue;
         }
 
-        const product = { id, variants: [] };
-        for (let j = 0; j < variants.length; j++){
-            const { id: variantId, option1, option2 } = variants[j];
-            const dVariant = dProducts[0].variants.filter((item) => {
-                return `${option1}`.trim() === item.option1.trim()
-                  && `${option2}` === `${item.option2}`.trim()
-            })
-            if (dVariant.length < 1) continue;
-
-            const sImage = images.filter((item) => {
-                const { image } = dVariant[0];
-                return item.src.indexOf(image) !== -1
-            })
-
-            if (sImage.length > 0) {
-                product.variants.push({
-                    id: variantId,
-                    image_id: sImage[0].id,
-                });
+        const product = { id, images: [] };
+        const dImages = dProducts[0].images;
+        if (images.length !== dImages.length) {
+            for (const dImage of dImages ) {
+                const sImage = images.filter((item) => {
+                    return item.src.indexOf(dImage.filename) !== -1
+                })
+                if (sImage.length > 0) {
+                    product.images.push({
+                        "id": sImage[0].id
+                    })
+                } else {
+                    product.images.push({
+                        "src": dImage.src
+                    })
+                }
             }
+
+            if (product.images.length !== dImages.length) {
+                fs.writeFile(`files/images-${id}-d.json`, JSON.stringify(dProducts), err => {
+                })
+                fs.writeFile(`files/images-${id}-s.json`, JSON.stringify(productsSource[i]), err => {
+                })
+                continue;
+            }
+
+            postProducts.push(product)
         }
 
-        if (product.variants.length !== variants.length) {
-            fs.writeFile(`files/product-${id}-d.json`, JSON.stringify(dProducts), err => {
-            })
-            fs.writeFile(`files/product-${id}-s.json`, JSON.stringify(productsSource[i]), err => {
-            })
-            // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${product.variants.length} ***** ${variants.length}` )
-            // break;
-            // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${variants.length} ***** ${product.variants.length}` )
-            continue;
-        }
-
-        postProducts.push(product)
         // break;
     }
     console.log('================================================================================================================================================================================================================================')
@@ -186,11 +185,18 @@ const getProductsFromExcel = async (storeURL, auth) => {
 
         if (preTitle === title && preCat === category && preHtmlBody === htmlBody) {
             product = getProductsVariants(worksheet, product, i);
+            const productImages = await getProductsImages(worksheet, i);
+            product.images = product.images.concat(productImages);
         } else {
             if (Object.keys(product).length > 0) {
+                if (product.images.length === 0) delete product.images;
+            }
+            if (Object.keys(product).length > 0) {
+                product.images = removeAllDuplicates(product.images);
                 products.push(product);
             }
             product = {};
+            product.images = [];
             product.variants = [];
 
             preTitle = title;
@@ -204,8 +210,14 @@ const getProductsFromExcel = async (storeURL, auth) => {
             product.product_type = categories[0].trim();
 
             product = getProductsVariants(worksheet, product, i);
+            const productImages = await getProductsImages(worksheet, i);
+            product.images = product.images.concat(productImages);
         }
     }
+    if (Object.keys(product).length > 0) {
+        if (product.images.length === 0) delete product.images;
+    }
+    product.images = removeAllDuplicates(product.images);
     products.push(product);
     return products
 }
@@ -214,18 +226,73 @@ const getProductsVariants = (worksheet, product, i) => {
     const option1 = worksheet[`${OPTION1_INDEX}${i}`] ? worksheet[`${OPTION1_INDEX}${i}`].v : null;
     const option2 = worksheet[`${OPTION2_INDEX}${i}`] ? worksheet[`${OPTION2_INDEX}${i}`].v : null;
 
-    const media = worksheet[`${MEDIA_INDEX}${i}`]?.v;
-
     product.variants.push({
         option1: option1,
         option2: option2,
-        image: media.replace(' ', '_'),
     })
     return product;
+}
+
+
+const getProductsImages = async (worksheet, i) => {
+    const images = [];
+    const productImages = [];
+    const media1 = worksheet[`${MEDIA1_INDEX}${i}`]?.v;
+    const media2 = worksheet[`${MEDIA2_INDEX}${i}`]?.v;
+    const media3 = worksheet[`${MEDIA3_INDEX}${i}`]?.v;
+    // const media4 = worksheet[`G${i}`]?.v;
+    // const media5 = worksheet[`H${i}`]?.v;
+    // const media6 = worksheet[`I${i}`]?.v;
+    // const media7 = worksheet[`J${i}`]?.v;
+
+    if (media1) images.push(media1);
+    if (media2) images.push(media2);
+    if (media3) images.push(media3);
+    // if (media4) images.push(media4);
+    // if (media5) images.push(media5);
+    // if (media6) images.push(media6);
+    // if (media7) images.push(media7);
+
+    for (let m = 0; m < images.length; m++){
+        try {
+            const imagePath1 = `${IMAGE_DIR_BASE}/${images[m]}.jpg`;
+            const imagePath2 = `${IMAGE_DIR_BASE}/${images[m]}.png`;
+
+            if (fs.existsSync(`Products/${imagePath1}`)) {
+                productImages.push({
+                    src: IMAGE_SERVER + imagePath1
+                });
+            }
+            if (fs.existsSync(`Products/${imagePath2}`)) {
+                productImages.push({
+                    filename: images[m],
+                    src: IMAGE_SERVER + imagePath2
+                });
+            }
+        } catch (e) {
+        }
+    }
+
+    return productImages;
 }
 
 const removeALLTags = (str) => {
     return str.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "").replace(/(<br[^>]+?>|<br>|<\/br>)/img, "").replace(/[^a-zA-Z]+/g, '');
 }
 
-module.exports = updateProducts;
+const removeAllDuplicates = (arr) => {
+    if (!arr) return [];
+
+    const obj = {};
+    const newArr = [];
+
+    for (let i = 0; i < arr.length; i++){
+        obj[arr[i].src] = arr[i];
+    }
+    for ( let key in obj )
+        newArr.push(obj[key]);
+
+    return newArr;
+}
+
+module.exports = updateProductImages;
