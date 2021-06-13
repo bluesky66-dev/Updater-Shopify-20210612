@@ -4,9 +4,9 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 5;
-const SHEET_LENGTH = 157;
-// const VENDOR = 'Henry';
+const SHEET_INDEX = 6;
+const SHEET_LENGTH = 273;
+const VENDOR = 'Henry';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
@@ -18,10 +18,10 @@ const OPTION2_INDEX = 'B';
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 270103806117;
+// const COLLECTION_ID = 270106362021;
 
 // Live Store
-const COLLECTION_ID = 269616808107;
+const COLLECTION_ID = 266911645867;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');

@@ -5,27 +5,27 @@ const fs = require('fs');
 const IMAGE_SERVER = 'https://blueskydev.000webhostapp.com/';
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 2;
-const SHEET_LENGTH = 261;
-const IMAGE_DIR_BASE = '20210612/belts more';
+const SHEET_INDEX = 6;
+const SHEET_LENGTH = 273;
+const IMAGE_DIR_BASE = '20210612/HOODIES-SWEATERS';
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
 const HTML_INDEX = 'L';
 
-const OPTION1_INDEX = 'B';
-const OPTION2_INDEX = 'C';
+const OPTION1_INDEX = 'C';
+const OPTION2_INDEX = 'B';
 
 const MEDIA1_INDEX = 'G';
 const MEDIA2_INDEX = 'H';
 const MEDIA3_INDEX = 'I';
 
 // Dev Store
-// const COLLECTION_ID = 270075887781;
+// const COLLECTION_ID = 270106362021;
 
 // Live Store
-const COLLECTION_ID = 268744392875;
+const COLLECTION_ID = 266911645867;
 
 const updateProductImages = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
