@@ -15,35 +15,36 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 6;
-const SHEET_LENGTH = 273;
-const IMAGE_DIR_BASE = '20210612/HOODIES-SWEATERS';
+const SHEET_INDEX = 7;
+const SHEET_LENGTH = 41;
+const IMAGE_DIR_BASE = '20210612/watches';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'K';
-const HTML_INDEX = 'L';
+const TITLE_INDEX = 'L';
+const HTML_INDEX = 'M';
 
-const OPTION1_INDEX = 'C';
-const OPTION2_INDEX = 'B';
+const OPTION1_INDEX = 'B';
+const OPTION2_INDEX = 'C';
 const ALI_CODE_INDEX = 'D';
 const MODEL_INDEX = 'E';
 
 const SKU_INDEX = 'F';
-const BARCODE_INDEX = 'J';
+const BARCODE_INDEX = 'K';
 
-const COST_PER_INDEX = 'M';
-const PRICE_INDEX = 'N';
-const COMPARE_AT_INDEX = 'O';
+const COST_PER_INDEX = 'N';
+const PRICE_INDEX = 'O';
+const COMPARE_AT_INDEX = 'P';
 
 const MEDIA1_INDEX = 'G';
 const MEDIA2_INDEX = 'H';
 const MEDIA3_INDEX = 'I';
+const MEDIA4_INDEX = 'J';
 
-const DELIVERY_INDEX = 'P';
-const STOCK_IN_INDEX = 'Q';
-const WEIGHT_INDEX = 'R';
-const HS_CODE_INDEX = 'S';
-const VENDOR_INDEX = 'U';
+const DELIVERY_INDEX = 'Q';
+const STOCK_IN_INDEX = 'R';
+const WEIGHT_INDEX = 'S';
+const HS_CODE_INDEX = 'T';
+const VENDOR_INDEX = 'V';
 
 const importProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');

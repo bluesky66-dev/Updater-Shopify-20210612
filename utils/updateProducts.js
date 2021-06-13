@@ -4,24 +4,24 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 6;
-const SHEET_LENGTH = 273;
-const VENDOR = 'Henry';
+const SHEET_INDEX = 7;
+const SHEET_LENGTH = 41;
+const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'K';
-const HTML_INDEX = 'L';
+const TITLE_INDEX = 'L';
+const HTML_INDEX = 'M';
 
-const OPTION1_INDEX = 'C';
-const OPTION2_INDEX = 'B';
+const OPTION1_INDEX = 'B';
+const OPTION2_INDEX = 'C';
 
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 270106362021;
+// const COLLECTION_ID = 269342507173;
 
 // Live Store
-const COLLECTION_ID = 266911645867;
+const COLLECTION_ID = 268742557867;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -135,8 +135,8 @@ const getProductsFromUrl = async (storeURL, auth) => {
     console.log('===Fetching Products===');
     var config = {
         method: 'get',
-        // url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
-        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}`,
+        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
+        // url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}`,
         headers: {
             'Authorization': auth,
             'Content-Type': 'application/json',
