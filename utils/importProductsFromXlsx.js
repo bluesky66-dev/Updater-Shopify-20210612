@@ -15,17 +15,17 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const PRODUCT_FILE = 'Products/20210612/shorts.json';
-const SHEET_INDEX = 1;
-const SHEET_LENGTH = 423;
-const IMAGE_DIR_BASE = '20210612/shorts';
+const PRODUCT_FILE = 'Products/20210612/Bags-Belts1.json';
+const SHEET_INDEX = 2;
+const SHEET_LENGTH = 261;
+const IMAGE_DIR_BASE = '20210612/belts more';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
 const HTML_INDEX = 'L';
 
-const OPTION1_INDEX = 'C';
-const OPTION2_INDEX = 'B';
+const OPTION1_INDEX = 'B';
+const OPTION2_INDEX = 'C';
 const ALI_CODE_INDEX = 'D';
 const MODEL_INDEX = 'E';
 
@@ -184,7 +184,10 @@ const getProducts = async (storeURL, auth) => {
             product.vendor = vendor;
             const categories = category.split('-');
             product.product_type = categories[0].trim();
-            product.tags = [categories[0].trim(), categories[1].trim()];
+            product.tags = [categories[0].trim()];
+            if (categories[1] !== undefined) {
+                product.tags.push(categories[1].trim())
+            }
 
             product = getProductsVariants(worksheet, product, i);
 

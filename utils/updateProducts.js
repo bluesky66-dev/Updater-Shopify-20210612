@@ -4,24 +4,24 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 1;
-const SHEET_LENGTH = 423;
-const VENDOR = 'Mountainskin Official Store';
+const SHEET_INDEX = 2;
+const SHEET_LENGTH = 261;
+// const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
 const HTML_INDEX = 'L';
 
-const OPTION1_INDEX = 'C';
-const OPTION2_INDEX = 'B';
+const OPTION1_INDEX = 'B';
+const OPTION2_INDEX = 'C';
 
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 269337526437;
+// const COLLECTION_ID = 270075887781;
 
 // Live Store
-const COLLECTION_ID = 268743606443;
+const COLLECTION_ID = 268744392875;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -47,6 +47,9 @@ const checkProductData = async (storeURL, auth, productData) => {
     const productsSource = productData[0].products;
     const productsDest = productData[1];
     const productTitlesDest = [];
+
+    const postProducts = [];
+
     for (let i = 0; i < productsSource.length; i++) {
         if (!productsSource[i] || Object.keys(productsSource[i]).length === 0) continue;
         const { id, title, product_type, variants, images, body_html } = productsSource[i];
@@ -68,7 +71,7 @@ const checkProductData = async (storeURL, auth, productData) => {
             // fs.writeFile(`files/sProducts-${id}.json`, JSON.stringify(productsSource[i]), err => {
             // })
             // break;
-            console.log(`***** ERROR ERROR ERROR ERROR ERROR ERROR ERROR ***** Not Found Products`)
+            // console.log(`***** ERROR ERROR ERROR ERROR ERROR ERROR ERROR ***** Not Found Products`)
             continue;
         }
 
@@ -101,13 +104,19 @@ const checkProductData = async (storeURL, auth, productData) => {
             })
             // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${product.variants.length} ***** ${variants.length}` )
             // break;
-            console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${variants.length} ***** ${product.variants.length}` )
+            // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${variants.length} ***** ${product.variants.length}` )
             continue;
         }
 
-        const productTitle = await putProduct(storeURL, auth, product);
-        productTitlesDest.push(productTitle);
+        postProducts.push(product)
         // break;
+    }
+    console.log('================================================================================================================================================================================================================================')
+    console.log('======== postProducts Length =====================', postProducts.length)
+    for (const productElement of postProducts) {
+        console.log(`=== Updating Product === ${productElement.id}`);
+        const productTitle = await putProduct(storeURL, auth, productElement);
+        productTitlesDest.push(productTitle);
     }
     return productTitlesDest !== '' ? productTitlesDest.length : 'Products already imported';
 }
@@ -120,7 +129,8 @@ const getProductsFromUrl = async (storeURL, auth) => {
     console.log('===Fetching Products===');
     var config = {
         method: 'get',
-        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
+        // url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
+        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}`,
         headers: {
             'Authorization': auth,
             'Content-Type': 'application/json',
