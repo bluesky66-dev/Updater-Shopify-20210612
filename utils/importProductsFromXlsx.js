@@ -15,10 +15,10 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const PRODUCT_FILE = 'Products/20210612/Bags-Belts1.json';
-const SHEET_INDEX = 2;
-const SHEET_LENGTH = 261;
-const IMAGE_DIR_BASE = '20210612/belts more';
+const PRODUCT_FILE = 'Products/20210612/Bags-Belts2.json';
+const SHEET_INDEX = 3;
+const SHEET_LENGTH = 16;
+const IMAGE_DIR_BASE = '20210612/MIXED';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'K';
