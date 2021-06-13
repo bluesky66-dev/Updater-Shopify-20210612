@@ -77,7 +77,13 @@ const checkProductData = async (storeURL, auth, productData) => {
 
         const product = { id, variants: [] };
         for (let j = 0; j < variants.length; j++){
-            const { id: variantId, option1, option2 } = variants[j];
+            const { id: variantId, option1, option2, image_id } = variants[j];
+            if (image_id) {
+                product.variants.push({
+                    id: variantId
+                });
+                continue;
+            }
             const dVariant = dProducts[0].variants.filter((item) => {
                 return `${option1}`.trim() === item.option1.trim()
                   && `${option2}` === `${item.option2}`.trim()
