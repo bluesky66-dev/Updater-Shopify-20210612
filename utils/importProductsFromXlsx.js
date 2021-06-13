@@ -15,9 +15,8 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const PRODUCT_FILE = 'Products/20210612/Bags-Belts2.json';
-const SHEET_INDEX = 3;
-const SHEET_LENGTH = 16;
+const SHEET_INDEX = 4;
+const SHEET_LENGTH = 7;
 const IMAGE_DIR_BASE = '20210612/MIXED';
 
 const CAT_INDEX = 'A';
@@ -49,26 +48,7 @@ const VENDOR_INDEX = 'U';
 const importProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
     try {
-        let productData = {};
-        if (fs.existsSync(PRODUCT_FILE)) {
-            const productsFileData = fs.readFileSync(PRODUCT_FILE, 'utf8');
-            productData = JSON.parse(productsFileData);
-            // fs.writeFile('files/require_products.json', JSON.stringify(productData), err => {
-            //     if (err) {
-            //         console.error(err)
-            //         return
-            //     }
-            // })
-            // return;
-        } else {
-            productData = await getProducts(destinationURL, authDest);
-            fs.writeFile(PRODUCT_FILE, JSON.stringify(productData), err => {
-                if (err) {
-                    console.error(err)
-                    return
-                }
-            })
-        }
+        const productData = await getProducts(destinationURL, authDest);
         productData ? console.log('Product Data Fetched ' + productData.length) : console.log('Error occured, no products!');
 
         // const productTitle = 12;
