@@ -15,16 +15,16 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 7;
-const SHEET_LENGTH = 41;
-const IMAGE_DIR_BASE = '20210612/watches';
+const SHEET_INDEX = 8;
+const SHEET_LENGTH = 294;
+const IMAGE_DIR_BASE = '20210612/LEATHER JACKETS';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'L';
 const HTML_INDEX = 'M';
 
-const OPTION1_INDEX = 'B';
-const OPTION2_INDEX = 'C';
+const OPTION1_INDEX = 'C';
+const OPTION2_INDEX = 'B';
 const ALI_CODE_INDEX = 'D';
 const MODEL_INDEX = 'E';
 
@@ -260,7 +260,7 @@ const getProductsImages = async (worksheet, i) => {
     const media1 = worksheet[`${MEDIA1_INDEX}${i}`]?.v;
     const media2 = worksheet[`${MEDIA2_INDEX}${i}`]?.v;
     const media3 = worksheet[`${MEDIA3_INDEX}${i}`]?.v;
-    // const media4 = worksheet[`G${i}`]?.v;
+    const media4 = worksheet[`${MEDIA4_INDEX}${i}`]?.v;
     // const media5 = worksheet[`H${i}`]?.v;
     // const media6 = worksheet[`I${i}`]?.v;
     // const media7 = worksheet[`J${i}`]?.v;
@@ -268,7 +268,7 @@ const getProductsImages = async (worksheet, i) => {
     if (media1) images.push(media1);
     if (media2) images.push(media2);
     if (media3) images.push(media3);
-    // if (media4) images.push(media4);
+    if (media4) images.push(media4);
     // if (media5) images.push(media5);
     // if (media6) images.push(media6);
     // if (media7) images.push(media7);
