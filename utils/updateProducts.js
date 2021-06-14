@@ -4,9 +4,9 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 10;
-const SHEET_LENGTH = 50;
-// const VENDOR = 'Mountainskin Official Store';
+const SHEET_INDEX = 11;
+const SHEET_LENGTH = 514;
+const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'L';
@@ -18,10 +18,10 @@ const OPTION2_INDEX = 'B';
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 270112293029;
+const COLLECTION_ID = 270126481573;
 
 // Live Store
-const COLLECTION_ID = 269623099563;
+// const COLLECTION_ID = 269641089195;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -66,10 +66,10 @@ const checkProductData = async (storeURL, auth, productData) => {
               && variants.length === item.variants.length;
         });
         if (dProducts.length < 1) {
-            // fs.writeFile(`files/dProducts-${id}.json`, JSON.stringify(dProducts), err => {
-            // })
-            // fs.writeFile(`files/sProducts-${id}.json`, JSON.stringify(productsSource[i]), err => {
-            // })
+            fs.writeFile(`files/dProducts-${id}.json`, JSON.stringify(dProducts), err => {
+            })
+            fs.writeFile(`files/sProducts-${id}.json`, JSON.stringify(productsSource[i]), err => {
+            })
             // break;
             // console.log(`***** ERROR ERROR ERROR ERROR ERROR ERROR ERROR ***** Not Found Products`)
             continue;
@@ -104,10 +104,10 @@ const checkProductData = async (storeURL, auth, productData) => {
         }
 
         if (product.variants.length !== variants.length) {
-            fs.writeFile(`files/product-${id}-d.json`, JSON.stringify(dProducts), err => {
-            })
-            fs.writeFile(`files/product-${id}-s.json`, JSON.stringify(productsSource[i]), err => {
-            })
+            // fs.writeFile(`files/product-${id}-d.json`, JSON.stringify(dProducts), err => {
+            // })
+            // fs.writeFile(`files/product-${id}-s.json`, JSON.stringify(productsSource[i]), err => {
+            // })
             // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${product.variants.length} ***** ${variants.length}` )
             // break;
             // console.log(`***** ERROR ERROR ERROR ERROR ERROR ***** ${variants.length} ***** ${product.variants.length}` )
@@ -135,8 +135,8 @@ const getProductsFromUrl = async (storeURL, auth) => {
     console.log('===Fetching Products===');
     var config = {
         method: 'get',
-        // url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
-        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}`,
+        url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}&vendor=${VENDOR}`,
+        // url: `https://${storeURL}.myshopify.com/admin/api/2021-01/products.json?limit=250&fields=id,title,body_html,product_type,images,variants&collection_id=${COLLECTION_ID}`,
         headers: {
             'Authorization': auth,
             'Content-Type': 'application/json',

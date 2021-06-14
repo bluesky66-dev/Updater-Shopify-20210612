@@ -15,9 +15,9 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 10;
-const SHEET_LENGTH = 50;
-const IMAGE_DIR_BASE = '20210612/blazers woolen';
+const SHEET_INDEX = 11;
+const SHEET_LENGTH = 514;
+const IMAGE_DIR_BASE = '20210612/JACKETS';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'L';
