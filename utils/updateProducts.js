@@ -4,8 +4,8 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 8;
-const SHEET_LENGTH = 294;
+const SHEET_INDEX = 9;
+const SHEET_LENGTH = 271;
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
@@ -18,10 +18,10 @@ const OPTION2_INDEX = 'B';
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 270110982309;
+// const COLLECTION_ID = 270112293029;
 
 // Live Store
-const COLLECTION_ID = 269622050987;
+const COLLECTION_ID = 269623099563;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
