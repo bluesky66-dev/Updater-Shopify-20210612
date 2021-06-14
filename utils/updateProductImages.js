@@ -5,14 +5,14 @@ const fs = require('fs');
 const IMAGE_SERVER = 'https://blueskydev.000webhostapp.com/';
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 6;
-const SHEET_LENGTH = 273;
-const IMAGE_DIR_BASE = '20210612/HOODIES-SWEATERS';
+const SHEET_INDEX = 10;
+const SHEET_LENGTH = 50;
+const IMAGE_DIR_BASE = '20210612/blazers woolen';
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'K';
-const HTML_INDEX = 'L';
+const TITLE_INDEX = 'L';
+const HTML_INDEX = 'M';
 
 const OPTION1_INDEX = 'C';
 const OPTION2_INDEX = 'B';
@@ -20,12 +20,13 @@ const OPTION2_INDEX = 'B';
 const MEDIA1_INDEX = 'G';
 const MEDIA2_INDEX = 'H';
 const MEDIA3_INDEX = 'I';
+const MEDIA4_INDEX = 'J';
 
 // Dev Store
-// const COLLECTION_ID = 270106362021;
+const COLLECTION_ID = 270112293029;
 
 // Live Store
-const COLLECTION_ID = 266911645867;
+// const COLLECTION_ID = 269623099563;
 
 const updateProductImages = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -240,7 +241,7 @@ const getProductsImages = async (worksheet, i) => {
     const media1 = worksheet[`${MEDIA1_INDEX}${i}`]?.v;
     const media2 = worksheet[`${MEDIA2_INDEX}${i}`]?.v;
     const media3 = worksheet[`${MEDIA3_INDEX}${i}`]?.v;
-    // const media4 = worksheet[`G${i}`]?.v;
+    const media4 = worksheet[`${MEDIA4_INDEX}${i}`]?.v;
     // const media5 = worksheet[`H${i}`]?.v;
     // const media6 = worksheet[`I${i}`]?.v;
     // const media7 = worksheet[`J${i}`]?.v;
@@ -248,7 +249,7 @@ const getProductsImages = async (worksheet, i) => {
     if (media1) images.push(media1);
     if (media2) images.push(media2);
     if (media3) images.push(media3);
-    // if (media4) images.push(media4);
+    if (media4) images.push(media4);
     // if (media5) images.push(media5);
     // if (media6) images.push(media6);
     // if (media7) images.push(media7);

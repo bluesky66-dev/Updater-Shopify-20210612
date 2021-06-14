@@ -18,10 +18,10 @@ const OPTION2_INDEX = 'B';
 const MEDIA_INDEX = 'G';
 
 // Dev Store
-// const COLLECTION_ID = 270112293029;
+const COLLECTION_ID = 270112293029;
 
 // Live Store
-const COLLECTION_ID = 269623099563;
+// const COLLECTION_ID = 269623099563;
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');
@@ -53,7 +53,7 @@ const checkProductData = async (storeURL, auth, productData) => {
     for (let i = 0; i < productsSource.length; i++) {
         if (!productsSource[i] || Object.keys(productsSource[i]).length === 0) continue;
         const { id, title, product_type, variants, images, body_html } = productsSource[i];
-        console.log(`=== Updating product === ${i} === ${id}`);
+        console.log(`=== Updating product === ${id} === ${title}`);
 
         const dProducts = productsDest.filter((item) => {
             // if (title !== item.title && product_type === item.product_type && removeALLTags(body_html) !== removeALLTags(item.body_html)){
