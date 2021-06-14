@@ -4,8 +4,8 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 9;
-const SHEET_LENGTH = 271;
+const SHEET_INDEX = 10;
+const SHEET_LENGTH = 50;
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
