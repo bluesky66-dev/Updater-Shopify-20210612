@@ -3,25 +3,27 @@ require('dotenv').config();
 var XLSX = require('xlsx');
 const fs = require('fs');
 
-const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 10;
-const SHEET_LENGTH = 50;
+const EXCEL_FILE = 'Products/20210615/FOOTWEAR_COLLECTION_NEW.xlsx';
+const SHEET_INDEX = 0;
+const SHEET_LENGTH = 343;
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'L';
-const HTML_INDEX = 'M';
+const TITLE_INDEX = 'G';
+const HTML_INDEX = 'H';
 
 const OPTION1_INDEX = 'C';
 const OPTION2_INDEX = 'B';
 
-const MEDIA_INDEX = 'G';
+const MEDIA_INDEX = 'I';
 
 // Dev Store
-const COLLECTION_ID = 270112293029;
+// const COLLECTION_ID = 270234353829;
 
 // Live Store
-// const COLLECTION_ID = 269623099563;
+const COLLECTION_ID = 269748043947;
+
+console.log('===== COLLECTION_ID =====', COLLECTION_ID)
 
 const updateProducts = async (sourceURL, destinationURL, authSource, authDest) => {
     console.log('====READING PRODUCTS FROM xlsx file====');

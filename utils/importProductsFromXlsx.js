@@ -14,36 +14,36 @@ const {
     sourceURL
 } = process.env;
 
-const EXCEL_FILE = 'Products/20210612/adjusted_size.xlsx';
-const SHEET_INDEX = 10;
-const SHEET_LENGTH = 50;
-const IMAGE_DIR_BASE = '20210612/blazers woolen';
+const EXCEL_FILE = 'Products/20210615/FOOTWEAR_COLLECTION_NEW.xlsx';
+const SHEET_INDEX = 0;
+const SHEET_LENGTH = 343;
+const IMAGE_DIR_BASE = '20210615/casual shoes';
 
 const CAT_INDEX = 'A';
-const TITLE_INDEX = 'L';
-const HTML_INDEX = 'M';
+const TITLE_INDEX = 'G';
+const HTML_INDEX = 'H';
 
 const OPTION1_INDEX = 'C';
 const OPTION2_INDEX = 'B';
 const ALI_CODE_INDEX = 'D';
 const MODEL_INDEX = 'E';
 
-const SKU_INDEX = 'F';
-const BARCODE_INDEX = 'K';
+const SKU_INDEX = 'E';
+const BARCODE_INDEX = 'F';
 
-const COST_PER_INDEX = 'N';
-const PRICE_INDEX = 'O';
-const COMPARE_AT_INDEX = 'P';
+const COST_PER_INDEX = 'L';
+const PRICE_INDEX = 'M';
+const COMPARE_AT_INDEX = 'N';
 
-const MEDIA1_INDEX = 'G';
-const MEDIA2_INDEX = 'H';
-const MEDIA3_INDEX = 'I';
+const MEDIA1_INDEX = 'I';
+const MEDIA2_INDEX = 'J';
+const MEDIA3_INDEX = 'K';
 const MEDIA4_INDEX = 'J';
 
-const DELIVERY_INDEX = 'Q';
-const STOCK_IN_INDEX = 'R';
-const WEIGHT_INDEX = 'S';
-const HS_CODE_INDEX = 'T';
+const DELIVERY_INDEX = 'O';
+const STOCK_IN_INDEX = 'P';
+const WEIGHT_INDEX = 'Q';
+const HS_CODE_INDEX = 'R';
 const VENDOR_INDEX = 'V';
 
 const importProducts = async (sourceURL, destinationURL, authSource, authDest) => {
@@ -118,8 +118,8 @@ const getProducts = async (storeURL, auth) => {
         const title = worksheet[`${TITLE_INDEX}${i}`]?.v;
         const htmlBody = worksheet[`${HTML_INDEX}${i}`]?.v;
         const deliveryTime = worksheet[`${DELIVERY_INDEX}${i}`]?.v;
-        const vendor = worksheet[`${VENDOR_INDEX}${i}`]?.v;
-        const aliCode = worksheet[`${ALI_CODE_INDEX}${i}`]?.v;
+        // const vendor = worksheet[`${VENDOR_INDEX}${i}`]?.v;
+        // const aliCode = worksheet[`${ALI_CODE_INDEX}${i}`]?.v;
         if (!title && !category) continue;
 
         if (preTitle === title && preCat === category && preHtmlBody === htmlBody) {
@@ -162,7 +162,7 @@ const getProducts = async (storeURL, auth) => {
             product.title = title;
             product.status = 'active';
             product.body_html = htmlBody;
-            product.vendor = vendor;
+            // product.vendor = vendor;
             const categories = category.split('-');
             product.product_type = categories[0].trim();
             product.tags = [categories[0].trim()];
@@ -179,12 +179,12 @@ const getProducts = async (storeURL, auth) => {
                     "value_type": "string",
                     "namespace": getMetaNamespace(product.product_type)
                 })
-                product.metafields.push({
-                    "key": "ali_code",
-                    "value": aliCode,
-                    "value_type": "string",
-                    "namespace": getMetaNamespace(product.product_type)
-                })
+                // product.metafields.push({
+                //     "key": "ali_code",
+                //     "value": aliCode,
+                //     "value_type": "string",
+                //     "namespace": getMetaNamespace(product.product_type)
+                // })
             }
 
             const productImages = await getProductsImages(worksheet, i);
@@ -260,7 +260,7 @@ const getProductsImages = async (worksheet, i) => {
     const media1 = worksheet[`${MEDIA1_INDEX}${i}`]?.v;
     const media2 = worksheet[`${MEDIA2_INDEX}${i}`]?.v;
     const media3 = worksheet[`${MEDIA3_INDEX}${i}`]?.v;
-    const media4 = worksheet[`${MEDIA4_INDEX}${i}`]?.v;
+    // const media4 = worksheet[`${MEDIA4_INDEX}${i}`]?.v;
     // const media5 = worksheet[`H${i}`]?.v;
     // const media6 = worksheet[`I${i}`]?.v;
     // const media7 = worksheet[`J${i}`]?.v;
@@ -268,7 +268,7 @@ const getProductsImages = async (worksheet, i) => {
     if (media1) images.push(media1);
     if (media2) images.push(media2);
     if (media3) images.push(media3);
-    if (media4) images.push(media4);
+    // if (media4) images.push(media4);
     // if (media5) images.push(media5);
     // if (media6) images.push(media6);
     // if (media7) images.push(media7);
