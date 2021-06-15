@@ -15,9 +15,9 @@ const {
 } = process.env;
 
 const EXCEL_FILE = 'Products/20210615/FOOTWEAR_COLLECTION_NEW.xlsx';
-const SHEET_INDEX = 0;
-const SHEET_LENGTH = 343;
-const IMAGE_DIR_BASE = '20210615/casual shoes';
+const SHEET_INDEX = 2;
+const SHEET_LENGTH = 221;
+const IMAGE_DIR_BASE = '20210615/leather casual';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'G';
