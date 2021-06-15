@@ -14,10 +14,12 @@ const {
     sourceURL
 } = process.env;
 
+console.log('===== destinationURL =====', destinationURL);
+
 const EXCEL_FILE = 'Products/20210615/FOOTWEAR_COLLECTION_NEW.xlsx';
-const SHEET_INDEX = 2;
-const SHEET_LENGTH = 221;
-const IMAGE_DIR_BASE = '20210615/leather casual';
+const SHEET_INDEX = 3;
+const SHEET_LENGTH = 191;
+const IMAGE_DIR_BASE = '20210615/dress shoes';
 
 const CAT_INDEX = 'A';
 const TITLE_INDEX = 'G';

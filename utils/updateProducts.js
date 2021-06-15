@@ -4,8 +4,8 @@ var XLSX = require('xlsx');
 const fs = require('fs');
 
 const EXCEL_FILE = 'Products/20210615/FOOTWEAR_COLLECTION_NEW.xlsx';
-const SHEET_INDEX = 0;
-const SHEET_LENGTH = 343;
+const SHEET_INDEX = 3;
+const SHEET_LENGTH = 191;
 // const VENDOR = 'Mountainskin Official Store';
 
 const CAT_INDEX = 'A';
@@ -18,10 +18,10 @@ const OPTION2_INDEX = 'B';
 const MEDIA_INDEX = 'I';
 
 // Dev Store
-// const COLLECTION_ID = 270234353829;
+// const COLLECTION_ID = 270239006885;
 
 // Live Store
-const COLLECTION_ID = 269748043947;
+const COLLECTION_ID = 268744229035;
 
 console.log('===== COLLECTION_ID =====', COLLECTION_ID)
 
